@@ -215,7 +215,7 @@ def parse(stream):
                     return build_tree(exp)
                 return build_tree(next_expr())
             return binary_op
-        
+
         def make_prefix_unary_op(expr_type, next_expr, token_types):
             def unary_op():
                 op_token_list = []
@@ -298,7 +298,7 @@ class Namespace(dict):
     def __init__(self, *args, parent=None):
         super().__init__(*args)
         self.parent = parent
-        
+
     def __getitem__(self, key):
         if not super().__contains__(key) \
                 and self.parent != None and key in self.parent:
@@ -315,13 +315,13 @@ class Namespace(dict):
 def build_global_environment(out):
     env = Namespace()
     env['.out'] = out
-    
+
     def primitive_function(name, argnames):
         def decor(original_func):
             env[name] = Function(env, argnames, original_func)
             return original_func
         return decor
-    
+
     @primitive_function('print', ['s'])
     def _print(runenv):
         s = ''
@@ -368,14 +368,14 @@ def build_global_environment(out):
 def execute(env, block):
     def true(obj):
         return obj.val == True
-    
+
     def exec_block(block):
         #ret might hold the return value for a function. We jump out of the
         #block if that happens.
         for s in block:
             ret = exec_statement(s)
             if ret: return ret
-            
+
     def exec_statement(statement):
         #if and while can cause functions to return if they contain 'return's
         #themselves. Other statements (besides return itself) cannot do this.
@@ -393,7 +393,7 @@ def execute(env, block):
         elif isinstance(statement, FunctionDef):
             exec_func_def(statement)
         return ret
-    
+
     def exec_if(statement):
         if true(eval_expr(statement.cond)):
             ret = exec_block(statement.then)
@@ -406,7 +406,7 @@ def execute(env, block):
         while true(eval_expr(statement.cond)):
             ret = exec_block(statement.do)
             if ret: return ret
-    
+
     def exec_assign(statement):
         env[statement.id.value] = eval_expr(statement.expr)
 
@@ -544,9 +544,9 @@ def interpreter(instream, outstream):
 
 def erio(text):
     exec_to_stdout(parse(tokenize(text)))
-    
+
 if __name__ == '__main__':
-    #interpreter(sys.stdin, sys.stdout)
+    interpreter(sys.stdin, sys.stdout)
     pass
-        
-        
+
+
