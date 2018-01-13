@@ -3,7 +3,7 @@ from erio import *
 
 class TokenizerTests(unittest.TestCase):
     '''Test cases for the erio tokenizer'''
-    
+
     def test_tokenizer(self):
         '''Tests the tokenizer with valid arguments'''
         test_string = '''
@@ -51,7 +51,7 @@ class TokenizerTests(unittest.TestCase):
             token = next(it)
             self.assertEqual(token.type, t)
             self.assertEqual(token.value, v)
-            
+
         self.assertRaises(StopIteration, next, it)
 
 class ParserTests(unittest.TestCase):
@@ -129,24 +129,24 @@ class ParserTests(unittest.TestCase):
         expected_results = [
             AssignmentStmnt(Token('identifier', 'x'),
                             AddExpr(Token('add', '+'),
-                                     ConstantExpr(Token('integer', '1')),
-                                     ConstantExpr(Token('integer', '1')))),
+                                    ConstantExpr(Token('integer', '1')),
+                                    ConstantExpr(Token('integer', '1')))),
             AssignmentStmnt(Token('identifier', 'x'),
                             AddExpr(Token('sub', '-'),
-                                     ConstantExpr(Token('integer', '1')),
-                                     ConstantExpr(Token('integer', '1')))),
+                                    ConstantExpr(Token('integer', '1')),
+                                    ConstantExpr(Token('integer', '1')))),
             AssignmentStmnt(Token('identifier', 'x'),
                             MulExpr(Token('mul', '*'),
-                                     ConstantExpr(Token('integer', '1')),
-                                     ConstantExpr(Token('integer', '1')))),
+                                    ConstantExpr(Token('integer', '1')),
+                                    ConstantExpr(Token('integer', '1')))),
             AssignmentStmnt(Token('identifier', 'x'),
                             MulExpr(Token('div', '/'),
-                                     ConstantExpr(Token('integer', '1')),
-                                     ConstantExpr(Token('integer', '1')))),
+                                    ConstantExpr(Token('integer', '1')),
+                                    ConstantExpr(Token('integer', '1')))),
             AssignmentStmnt(Token('identifier', 'x'),
                             MulExpr(Token('mod', '%'),
-                                     ConstantExpr(Token('integer', '1')),
-                                     ConstantExpr(Token('integer', '1'))))]
+                                    ConstantExpr(Token('integer', '1')),
+                                    ConstantExpr(Token('integer', '1'))))]
         results = list(program)
         self.assertListEqual(results, expected_results)
         self.assertRaises(StopIteration, next, program)
@@ -235,7 +235,7 @@ class ParserTests(unittest.TestCase):
                                                     MulExpr(Token('mod', '%'),
                                                             VariableExpr(Token('identifier', 'z')),
                                                             ConstantExpr(Token('integer', '6')))))))]
-                                           
+
         results = list(program)
         self.assertListEqual(results, expected_results)
         self.assertRaises(StopIteration, next, program)
