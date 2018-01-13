@@ -1,0 +1,107 @@
+Grammar
+
+start 			:= <statement-block>
+statement-block		:= <statement><statement>*
+statement  		:= <if-statement>|<while-statement>|<assignment-statement>|<function-call>
+if-statement 		:= <if-keyword> <expression> <statement-block> <end-if-keyword>
+if-statement 		:= <if-keyword> <expression> <statement-block> <else-keyword> <statement-block> <end-if-keyword>
+while-statement 	:= <while-keyword> <expression> <statement-block> <end-while-keyword>
+assignment-statement 	:= <identifier><assignment-operator><expression>
+function-call	 	:= <identifier><open-paren><argument-list><close-paren>
+argument-list	 	:= <expression>|<expression><arg-separator><argument-list>
+expression 		:= <constant>|<identifier>|<compound-expression>|<function-call>
+compound-expression 	:= <open-paren><expression><operator><expression><close-paren>
+constant 		:= <int>|<string>|<boolean>
+
+Tokens
+
+identifier 		:= <alpha><alphanum>*
+assignment-operator 	:= =
+if-keyword		:= if
+else-keyword		:= else
+end-if-keyword	 	:= end-if
+while-keyword:= 	:= while
+end-while-keyword 	:= end-while
+open-paren 		:= (
+close-paren 		:= )
+arg-separator	 	:= ,
+int 			:= <number>+
+string	 		:= "<char>*"
+char 			:= <alphanum>|<symbol>
+boolean 		:= true|false
+alphanum 		:= <alpha>|<number>
+alpha	 		:= [A-z]|_
+number	 		:= [0-9]
+symbol	 		:= [!@#$%^&*:;<>,.?/+-=_]
+operator 		:= ==|>|<|>=|<=|!=|+|*|/|%|-
+
+
+New Expressions
+
+or-expression		:= <logic-expression> or <logic-expression>
+and-expression		:= <logic-expression> and <logic-expression>
+not-expression		:= not <logic-expression>
+logic-expression	:= <or-expression>|<and-expression>|<not-expression>|<infix-logic-expr>
+infix-logic-expr	:= <expression> <logic-infix-op> <expression>
+
+add-expression		:= <mul-expression> <add-sub-op> <mul-expression>
+mul-expression		:= <prim-expression> <mul-div-mod-op> <prim-expression>
+
+a or b or c
+		a
+	or
+		b
+or
+	c
+
+(((x + x) == ((x * x) - x)) and (((x - (x % x)) < (x / x))) or ((not x) != (x % x))
+
+or-exp
+	and-exp
+		eq-exp
+			add-exp
+				x
+				x
+			add-exp
+				mul-exp
+					x
+					x
+				x
+		lt-exp
+			add-exp
+				x
+				mul-exp
+					x
+					x
+			mul-exp
+				x
+				x
+	noteq-exp
+		not-exp
+			x
+		mul-exp
+			x
+			x
+
+        def prime():
+            if token.type == 'or':
+                op = token
+                next_token() #or
+                exp = and_expr()
+                root, incomplete = prime()
+                if root is None:
+                    root = OrExp(op, None, exp)
+                    return root, root
+                else:
+                    newchild = OrExp(op, None, exp)
+                    incomplete.lhs = newchild
+                    return root, newchild
+            else:
+                return None, None
+        lhs = and_exp()
+        root, incomplete = prime()
+        if root is None:
+            return lhs
+        else:
+            incomplete.lhs = lhs
+            return root
